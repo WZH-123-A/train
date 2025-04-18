@@ -1,0 +1,55 @@
+@startuml
+skinparam classFontSize 13
+skinparam arrowsize 2
+
+' 1. 抽象处理器接口/类
+interface Filter {
+    + {abstract} doFilter(request, response, chain)
+}
+
+' 2. 具体处理器（JwtFilter）
+class JwtFilter {
+    - jwtUtil: JwtUtil
+    + doFilterInternal(request, response, chain)
+    - extractToken(request): String
+}
+
+' 3. 责任链维护者（Spring Security 的 FilterChain）
+class FilterChain {
+    - filters: List<Filter>
+    + doFilter(request, response)
+}
+
+' 4. 请求/响应对象
+class HttpServletRequest
+class HttpServletResponse
+
+' 5. 其他相关类
+class JwtUtil {
+    + validateToken(token): boolean
+    + getUsernameFromToken(token): String
+}
+
+' 关系定义
+Filter <|.. JwtFilter
+Filter <|.. OncePerRequestFilter
+JwtFilter --|> OncePerRequestFilter
+FilterChain o-- Filter : 聚合
+JwtFilter --> JwtUtil : 依赖
+JwtFilter --> HttpServletRequest : 处理
+JwtFilter --> HttpServletResponse : 处理
+FilterChain --> HttpServletRequest : 传递
+FilterChain --> HttpServletResponse : 传递
+
+note right of JwtFilter::doFilterInternal
+    if (token有效) {
+        设置认证信息到SecurityContext
+    }
+    chain.doFilter(request, response) → 传递给下一个过滤器
+end note
+
+note top of FilterChain
+    按顺序调用所有过滤器的doFilter()
+    最后一个过滤器调用实际业务逻辑
+end note
+@enduml

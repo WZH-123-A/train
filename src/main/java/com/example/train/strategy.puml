@@ -1,0 +1,44 @@
+@startuml
+
+interface CalculateFareService {
+  + calculateFare(distance: double): int
+}
+
+class CalculateBusinessFareServiceImpl {
+  + calculateFare(distance: double): int
+}
+
+class CalculateFirstSeatFareServiceImpl {
+  + calculateFare(distance: double): int
+}
+
+class CalculateHardSeatFareServiceImpl {
+  + calculateFare(distance: double): int
+}
+
+class CalculateHardSleepFareServiceImpl {
+  + calculateFare(distance: double): int
+}
+
+class CalculateSecondFareServiceImpl {
+  + calculateFare(distance: double): int
+}
+
+class CalculateSoftSeatFareServiceImpl {
+  + calculateFare(distance: double): int
+}
+
+class CalculateSoftSleepFareServiceImpl {
+  + calculateFare(distance: double): int
+}
+
+' 实现关系
+CalculateBusinessFareServiceImpl ..|> CalculateFareService
+CalculateFirstSeatFareServiceImpl ..|> CalculateFareService
+CalculateHardSeatFareServiceImpl ..|> CalculateFareService
+CalculateHardSleepFareServiceImpl ..|> CalculateFareService
+CalculateSecondFareServiceImpl ..|> CalculateFareService
+CalculateSoftSeatFareServiceImpl ..|> CalculateFareService
+CalculateSoftSleepFareServiceImpl ..|> CalculateFareService
+
+@enduml

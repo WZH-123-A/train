@@ -1,0 +1,35 @@
+@startuml
+interface SubjectService {
+    + registerObserver(ObserverService observer)
+    + removeObserver(ObserverService observer)
+    + notifyObservers(List<Integer> users, String NotifyContent, String Date)
+}
+
+interface ObserverService {
+    + update(List<Integer> users, String NotifyContent, String Date)
+}
+
+class ViaStationStateServiceImpl {
+    - List<ObserverService> observers
+    + registerObserver(ObserverService observer)
+    + removeObserver(ObserverService observer)
+    + notifyObservers(List<Integer> users, String NotifyContent, String Date)
+}
+
+class UserNotifyServiceImpl {
+    + update(List<Integer> users, String NotifyContent, String Date)
+}
+
+class ViaStationServiceImpl {
+    - ViaStationStateServiceImpl viaStationStateServiceImpl
+    - UserNotifyServiceImpl userNotifyServiceimpl
+    + setLater(ViaStation viaStation)
+}
+
+SubjectService <|.. ViaStationStateServiceImpl
+ObserverService <|.. UserNotifyServiceImpl
+
+ViaStationStateServiceImpl <-- ViaStationServiceImpl
+ObserverService <-- ViaStationStateServiceImpl
+UserNotifyServiceImpl<-- ViaStationServiceImpl
+@enduml
